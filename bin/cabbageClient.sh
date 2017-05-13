@@ -9,4 +9,4 @@ export C_FORCE_ROOT=true
 export PYTHONPATH=$PYTHONPATH:$p/src
 echo $PYTHONPATH
 
-python $p/src/com/pingansec/cabbage/client_main.py $cfgPath
+python $p/src/cabbage/client_main.py $cfgPath

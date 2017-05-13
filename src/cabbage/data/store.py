@@ -135,4 +135,6 @@ class Store(Interface):
     
     def addWorkQueue(self,brokerQueue,work):
         pass
-        
+    
+    def addUser(self,user):
+        pass

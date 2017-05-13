@@ -22,3 +22,11 @@ class BaseHandler(SessionBaseHandler):
             return str(param)
         else:
             None
+    
+    def getCurrentUserFromSession(self):
+        if 'user' in self.session:
+            return self.session['user'] 
+        else:
+#             user = User().getUser(self.get_current_user())
+            self.session['user'] = user
+            return user

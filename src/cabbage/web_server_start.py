@@ -63,6 +63,10 @@ class CabbageWebServer():
             self.kazooClient.create("/cabbage/monitor/works")
             self.kazooClient.create("/cabbage/monitor/brokerServers")
             
+        if not self.kazooClient.isExistPath("/cabbage/users"):
+            self.kazooClient.create("/cabbage/users", makepath=True)
+            
+            
         if not self.kazooClient.isExistPath("/cabbage/queueServer"):
             self.kazooClient.create("/cabbage/queueServer/brokerServers", makepath=True)
             self.kazooClient.create("/cabbage/queueServer/brokerServers/readies")

@@ -560,7 +560,6 @@ class ZookeeperStore(object):
             self.client.putData(path+"/"+TASK_FAILED,str(obj.taskFailed))
             self.client.putData(path+"/"+TASK_RUNTIME,str(obj.taskRuntime))
             
-            
             if hasattr(obj,TASK_RECEIVED):
                 self.client.putData(path+"/"+TASK_RECEIVED,str(obj.taskReceived))
                 
@@ -694,6 +693,10 @@ class ZookeeperStore(object):
             self.client.putData(parent+"/"+BROKER_SERVER,brokerQueue.server)  
         
         self.client.create(parent+"/"+QUEUES+"/"+brokerQueue.queueName)
+    
+    
+    def addUser(self,user):
+        pass
     
     
     
