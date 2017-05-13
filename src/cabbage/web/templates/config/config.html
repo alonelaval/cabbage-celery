@@ -1,0 +1,149 @@
+{% extends "../base.html" %}
+
+      
+{% block extra_styles %}
+    <link href="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet">
+{% end %}
+{% block container %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">配置管理</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+                 {% include "../message_alert.html" %}  
+            </div>
+			 <!-- /.row 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" align="center">
+                        	<font color="red">
+                           </font>
+                        </div>
+            </div>-->
+            <!-- /.row -->
+        <div class="toolbar">
+        	<!-- 
+            <button id="checkAll" class="btn btn-default">全选</button>
+            <button id="uncheckAll" class="btn btn-default">取消全选</button>
+            <button id="uncheckAll" class="btn btn-default">下载网店列表</button>
+            <button id="uncheckAll" class="btn btn-default">爬取选定网店产品信息</button>
+            <!-- <button id="uncheckAll" class="btn btn-default">爬取所有网店产品信息</button> -->
+              <button  class="btn btn-success" data-toggle="modal" data-target="addQueueModal" >
+	            	<i class="glyphicon glyphicon-plus-sign"></i> 配置管理
+	       		 </button>
+        </div>
+        <table id="table"
+               data-toggle="table"
+               data-toolbar=".toolbar"
+               data-pagination="true"
+               data-show-refresh="true"
+               data-show-columns="true"
+			   data-url="/config"
+               data-page-list="[5, 10, 20, 50, 100, 200]"
+               data-maintain-selected="true"
+              >
+        </table>    
+        
+        
+        <div class="modal fade" id="addQueueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加队列</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/queues/addQueue" method="post" id="addQueueForm"> 
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">队列名称</label>
+            <input type="text" class="form-control" name="brokerQueue" id="brokerQueue">
+          </div>
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">交换器名称</label>
+            <input type="text" class="form-control" name="exchange" id="exchange">
+          </div>
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">路由名称</label>
+            <input type="text" class="form-control" name="routingKey" id="routingKey">
+          </div>
+            <div class="form-group">
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="addQueueBtn" type="button" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </div>
+</div> 
+        
+{% end %}
+
+{% block extra_scripts %}    
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.js') }}" ></script>
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table-locale-all.min.js') }}"></script>
+<script type="text/javascript">
+window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+
+function operateFormatter(value, row, index) {
+    return [
+        '<a class="remove" href="#" title="删除">',
+        '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>'
+    ].join('');
+}
+
+//$(document).ready(function() {
+    var $table = $('#table');
+    $table.bootstrapTable({
+    	method:"post",
+    	contentType:"application/x-www-form-urlencoded",
+        columns: [
+                {
+                    title: 'key',
+                    field: 'key',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value, row, index){
+                    	return '<a target="_blank" class="like" href="http://'+value+'" title="Like">'+
+                        value
+                        +'</a>  '
+                    }
+                },
+                {
+               	 title: 'value',
+                    field: 'value',
+                    align: 'center',
+                   
+               }
+                ,
+                {
+               	 title: 'desc',
+                    field: 'routingKey',
+                    align: 'center',
+                    valign: 'middle'
+               }
+        ]
+    });
+    $(function () {
+    	$('#addQueueModal').modal({backdrop: 'static', keyboard: false,show:false});
+    	$("#addQueueBtn").click(function(){
+    		$("#addQueueForm").submit();
+    	});
+    });
+    
+//});
+</script>
+{% end %}

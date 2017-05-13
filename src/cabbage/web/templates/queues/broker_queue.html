@@ -1,0 +1,304 @@
+{% extends "../base.html" %}
+
+      
+{% block extra_styles %}
+    <link href="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet">
+{% end %}
+{% block container %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">队列管理</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+                 {% include "../message_alert.html" %}  
+            </div>
+			 <!-- /.row 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" align="center">
+                        	<font color="red">
+                           </font>
+                        </div>
+            </div>-->
+            <!-- /.row -->
+        <div class="toolbar">
+        	<!-- 
+            <button id="checkAll" class="btn btn-default">全选</button>
+            <button id="uncheckAll" class="btn btn-default">取消全选</button>
+            <button id="uncheckAll" class="btn btn-default">下载网店列表</button>
+            <button id="uncheckAll" class="btn btn-default">爬取选定网店产品信息</button>
+            <!-- <button id="uncheckAll" class="btn btn-default">爬取所有网店产品信息</button> -->
+              <button  class="btn btn-success" data-toggle="modal" data-target="#addQueueModal" >
+	            	<i class="glyphicon glyphicon-plus-sign"></i> 添加队列
+	       		 </button>
+        </div>
+        <table id="table"
+               data-toggle="table"
+               data-toolbar=".toolbar"
+               data-pagination="true"
+               data-show-refresh="true"
+               data-show-columns="true"
+			   data-url="/queues/brokerQueue"
+               data-page-list="[5, 10, 20, 50, 100, 200]"
+               data-maintain-selected="true"
+              >
+        </table>    
+        
+        
+        <div class="modal fade" id="addQueueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加队列</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/queues/addQueue" method="post" id="addQueueForm"> 
+         <div class="form-group">
+                                      <label>队列服务器（集群）</label>
+                                <select id="brokerServer" class="form-control" name="brokerServer" >
+                                             	  {% for server in servers %}
+											         <option>{{server.hostName +":"+ server.ip}}</option>
+											       {% end %}
+                                            </select>
+                        </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">队列名称</label>
+            <input type="text" class="form-control" name="brokerQueue" id="brokerQueue">
+          </div>
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">交换器名称</label>
+            <input type="text" class="form-control" name="exchange" id="exchange">
+          </div>
+           <div class="form-group">
+            <label for="recipient-name" class="control-label">路由名称</label>
+            <input type="text" class="form-control" name="routingKey" id="routingKey">
+          </div>
+            <div class="form-group">
+                                        <label>执行的节点</label>
+                                            <select multiple class="form-control" name="nodes" size="20">
+                                             	<option value="-1" selected>ALL</option>
+                                             	  {% for work in works %}
+											         <option>{{work.hostName +":"+ work.ip}}</option>
+											       {% end %}
+                                            </select>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="addQueueBtn" type="button" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </div>
+</div> 
+
+  <div class="modal fade" id="addQueueNodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加节点</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/queues/addQueueNode" method="post" id="addQueueNodeForm">
+        	<input type="hidden" name="brokerQueue" id="brokerQueueNode"/>
+            <div class="form-group">
+                                        <label>执行的节点</label>
+                                            <select id="addQueueNodeSelect" multiple class="form-control" name="nodes" size="20">
+                                             	<!-- <option value="-1" selected>ALL</option> -->
+                                             	  {% for work in works %}
+											         <option>{{work.hostName +":"+ work.ip}}</option>
+											       {% end %}
+                                            </select>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="addQueueNodeBtn" type="button" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </div>
+</div>   
+
+  <div class="modal fade" id="removeQueueNodeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加节点</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/queues/removeQueueNode" method="post" id="removeQueueNodeForm">
+        	<input type="hidden" name="brokerQueue" id="removeBrokerQueueNode"/>
+            <div class="form-group">
+                                        <label>执行的节点</label>
+                                            <select id="removeQueueNodeSelect" multiple class="form-control" name="nodes" size="20">
+                                             	<!-- <option value="-1" selected>ALL</option> -->
+                                             	  {% for work in works %}
+											         <option>{{work.hostName +":"+ work.ip}}</option>
+											       {% end %}
+                                            </select>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button  type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="addQueueNodeBtn" type="button" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+  </div>
+</div>  
+      
+{% end %}
+
+{% block extra_scripts %}    
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.js') }}" ></script>
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table-locale-all.min.js') }}"></script>
+<script type="text/javascript">
+window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+
+function operateFormatter(value, row, index) {
+	works = row['works']
+	queueName=row['queueName']
+    return [
+        /*'<a class="remove" href="javascript:showRemoveNodeModal(\''+works+'\',\''+queueName+'\')" title="删除节点">',
+        '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>   ',*/
+        '<a class="remove" href="javascript:showAddNodeModal(\''+works+'\',\''+queueName+'\')" title="添加节点">',
+        '<i class="glyphicon glyphicon-plus"></i>',
+        '</a>'
+    ].join('');
+}
+
+var workNodes="";
+{% for work in works %}
+workNodes+= '{{work.hostName +":"+ work.ip+","}}'
+{% end %}
+	
+function showRemoveNodeModal(nodes,queueName){
+	console.log(workNodes);
+	console.log(queueName)
+	$("#removeBrokerQueueNode").val(queueName)
+	var n = workNodes.split(",")
+	$("#removeQueueNodeSelect").empty();
+	nodes = nodes.split(",");
+	console.log(nodes)
+	n.map(function(x){
+		if(x != ""){
+			$("#removeQueueNodeSelect").append("<option>"+x+"</option>");
+		}
+	});
+	$("#removeQueueNodeModal").modal('show')  
+}
+
+function showAddNodeModal(nodes,queueName){
+	$("#brokerQueueNode").val(queueName)
+	var n = workNodes.split(",")
+	$("#addQueueNodeSelect").empty();
+	nodes = nodes.split(",");
+	console.log(nodes)
+	n.map(function(x){
+		if(x != ""){
+			value = x.split(":")[0];
+			var flag=true
+			for(i=0;i<nodes.length;i++){
+				if(value == nodes[i]){
+					flag=false	
+				}				
+			}
+			if(flag){
+				$("#addQueueNodeSelect").append("<option>"+x+"</option>");
+			}
+		}
+	});
+		
+	$("#addQueueNodeModal").modal('show')  
+}
+
+function workCountFormatter(value, row, index) {
+    return row['works'].length
+}
+//$(document).ready(function() {
+    var $table = $('#table');
+    $table.bootstrapTable({
+    	method:"post",
+    	contentType:"application/x-www-form-urlencoded",
+        columns: [
+                {
+                    title: '队列名称',
+                    field: 'queueName',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value, row, index){
+                    	return '<a target="_blank" class="like" href="http://'+value+'" title="Like">'+
+                        value
+                        +'</a>  '
+                    }
+                },
+                {
+               	 title: '交换器名称',
+                    field: 'exchangeName',
+                    align: 'center',
+                   
+               }
+                ,
+                {
+               	 title: '路由名称',
+                    field: 'routingKey',
+                    align: 'center',
+                    valign: 'middle'
+               },
+                {
+                   	 title: '所属的服务器',
+                        field: 'server',
+                        align: 'center',
+                        valign: 'middle'
+                 },
+                 {
+                   	 title: '节点',
+                        field: 'works',
+                        align: 'center',
+                        valign: 'middle'
+                 },
+                 {
+                   	 title: '节点数',
+                        field: 'workCount',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: workCountFormatter
+                 },
+				{
+                    field: 'operate',
+                    title: '操作',
+                    align: 'center',
+                    events: operateEvents,
+                    formatter: operateFormatter
+				}
+        ]
+    });
+    $(function () {
+    	$('#addQueueModal').modal({backdrop: 'static', keyboard: false,show:false});
+    	$("#addQueueBtn").click(function(){
+    		$("#addQueueForm").submit();
+    	});
+    	$("#addQueueNodeBtn").click(function(){
+    		$("#addQueueNodeForm").submit();
+    	});
+    });
+    
+//});
+</script>
+{% end %}

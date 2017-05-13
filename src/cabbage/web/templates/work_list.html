@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+      
+{% block extra_styles %}
+    <link href="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet">
+{% end %}
+{% block container %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">节点列表</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+			 <!-- /.row 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" align="center">
+                        	<font color="red">
+                           </font>
+                        </div>
+            </div>-->
+            <!-- /.row -->
+        <div class="toolbar">
+        	<!-- 
+            <button id="checkAll" class="btn btn-default">全选</button>
+            <button id="uncheckAll" class="btn btn-default">取消全选</button>
+            <button id="uncheckAll" class="btn btn-default">下载网店列表</button>
+            <button id="uncheckAll" class="btn btn-default">爬取选定网店产品信息</button>
+            <!-- <button id="uncheckAll" class="btn btn-default">爬取所有网店产品信息</button> -->
+            
+        </div>
+        <table id="table"
+               data-toggle="table"
+               data-toolbar=".toolbar"
+               data-pagination="true"
+               data-show-refresh="true"
+               data-show-columns="true"
+			   data-url="/work/list"
+               data-page-list="[5, 10, 20, 50, 100, 200]"
+              >
+        </table>     
+        
+{% end %}
+
+{% block extra_scripts %}    
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.js') }}" ></script>
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table-locale-all.min.js') }}"></script>
+<script type="text/javascript">
+window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+
+function changeWorkStatus(hostName,status){
+	$.post("/work/workStatusChange",{hostName:hostName,status:status})
+	$table.bootstrapTable('refresh');
+}
+
+function operateFormatter(value, row, index) {
+	console.log(row)
+	status = row['status']
+	hostName=row['hostName']
+	console.log(hostName)
+	if(status == 'onLine'){
+	    return [
+	        '<a class="remove" href="javascript:changeWorkStatus(\''+hostName+'\',\'offLine\')" title="暂停服务">',
+	        '<i class="glyphicon  glyphicon-pause"></i>',
+	        '</a>  ',
+	        '<a class="remove" href="javascript:changeWorkStatus(\''+hostName+'\',\'remove\')" title="移除节点">',
+	        '<i class="glyphicon  glyphicon-remove"></i>',
+	        '</a>'
+	    ].join('');
+	}
+	else if (status == 'offLine' || status == 'ready'){
+	    return [
+		        '<a class="remove" href="javascript:changeWorkStatus(\''+hostName+'\',\'onLine\')" title="启动服务">',
+		        '<i class="glyphicon  glyphicon-step-forward"></i>',
+		        '</a>  ',
+		        '<a class="remove" href="javascript:changeWorkStatus(\''+hostName+'\',\'remove\')" title="移除节点">',
+		        '<i class="glyphicon  glyphicon-remove"></i>',
+		        '</a>'
+		    ].join('');
+	}
+	
+}
+
+//$(document).ready(function() {
+    var $table = $('#table');
+    $table.bootstrapTable({
+    	method:"post",
+    	contentType:"application/x-www-form-urlencoded",
+        columns: [
+                {
+                    title: '机器名',
+                    field: 'hostName',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+               		 title: 'ip',
+                    field: 'ip',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value, row, index){
+                    	if (value == null || value==='null'){
+                    		return "-"
+                    	}
+                    	else{
+                    		return value		
+                    		}
+                    }
+               }
+                ,
+                {
+               	 title: '端口',
+                    field: 'port',
+                    align: 'center',
+                    valign: 'middle'
+               }
+               ,
+               {
+              	 title: '所属集群',
+                   field: 'brokerServer',
+                   align: 'center',
+                   valign: 'middle'
+              }
+              ,
+              {
+             	 title: '队列',
+                  field: 'queues',
+                  align: 'center',
+                  valign: 'middle'
+             },
+               {
+              	 title: '状态',
+                   field: 'status',
+                   align: 'center',
+                   valign: 'middle'
+              },
+              {
+               	 title: '服务状态',
+                    field: 'serviceStatus',
+                    align: 'center',
+                    valign: 'middle'
+               },
+                {
+                    field: 'operate',
+                    title: '操作',
+                    align: 'center',
+                    formatter: operateFormatter
+                }
+        ]
+    });
+    $(function () {
+       /*  $('#checkAll').click(function () {
+            $table.bootstrapTable('togglePagination').bootstrapTable('checkAll').bootstrapTable('togglePagination');
+        });
+        $('#uncheckAll').click(function () {
+            $table.bootstrapTable('togglePagination').bootstrapTable('uncheckAll').bootstrapTable('togglePagination');
+        });
+        <thead>
+        <tr>
+         <th data-checkbox="true"></th>
+           				 <th data-field="shopId">网店ID</th>
+                         <th data-field="shopName">网店名称</th>
+                         <th data-field="shopUrl">网店地址</th>
+                         <th data-field="category">网店主营</th>
+                         <th data-field="shopUserName">网店店主名称</th>
+                         <th data-field="status">状态</th>
+                         <th>操作</th>
+        </tr>
+        </thead>
+         */
+    });
+    
+//});
+</script>
+{% end %}

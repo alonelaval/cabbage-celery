@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+      
+{% block extra_styles %}
+    <link href="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.css') }}" rel="stylesheet">
+{% end %}
+{% block container %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">任务列表</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+			 <!-- /.row 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" align="center">
+                        	<font color="red">
+                           </font>
+                        </div>
+            </div>-->
+            <!-- /.row -->
+        <div class="toolbar">
+        	<!-- 
+            <button id="checkAll" class="btn btn-default">全选</button>
+            <button id="uncheckAll" class="btn btn-default">取消全选</button>
+            <button id="uncheckAll" class="btn btn-default">下载网店列表</button>
+            <button id="uncheckAll" class="btn btn-default">爬取选定网店产品信息</button>
+            <!-- <button id="uncheckAll" class="btn btn-default">爬取所有网店产品信息</button> -->
+            
+        </div>
+        <table id="table"
+               data-toggle="table"
+               data-toolbar=".toolbar"
+               data-pagination="true"
+               data-side-pagination="server"
+               data-show-refresh="true"
+               data-show-columns="true"
+			   data-url="/jobListData"
+               data-page-list="[5, 10, 20, 50, 100, 200]"
+               data-maintain-selected="true"
+              >
+        </table>     
+        
+{% end %}
+
+{% block extra_scripts %}    
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table.min.js') }}" ></script>
+ <script src="{{ static_url('bower_components/bootstrap-table/bootstrap-table-locale-all.min.js') }}"></script>
+<script type="text/javascript">
+window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+
+function operateFormatter(value, row, index) {
+	if (row.status != "delete"){
+	    return [
+	        '<a class="remove" href="/removeJob?jobId='+row.jobId+'" title="删除">',
+	        '<i class="glyphicon glyphicon-remove"></i>',
+	        '</a>'
+	    ].join('');
+	}
+}
+
+//$(document).ready(function() {
+    var $table = $('#table');
+    $table.bootstrapTable({
+        columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: 'JOBID',
+                    field: 'jobId',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+               	 title: 'job名称',
+                    field: 'jobName',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value, row, index){
+                    	return '<a target="_blank" class="like" href="http://'+value+'" title="Like">'+
+                        value
+                        +'</a>  '
+                    }
+               }
+                ,
+                {
+               	 title: '主程序名称',
+                    field: 'fileName',
+                    align: 'center',
+                    valign: 'middle'
+               },
+                {
+                  	 title: '主程序类型',
+                       field: 'fileType',
+                       align: 'center',
+                       valign: 'middle'
+                  },
+               {
+                	 title: '运行的队列服务器',
+                     field: 'brokerServer',
+                     align: 'left',
+                     valign: 'middle'
+                }
+                  ,
+                  {
+                   	 title: '运行的队列',
+                        field: 'brokerQueue',
+                        align: 'left',
+                        valign: 'middle'
+                   }
+                  ,{
+                 	 title: '状态',
+                      field: 'status',
+                      align: 'center',
+                      valign: 'middle'
+                 }
+				,{
+                    field: 'operate',
+                    title: '操作',
+                    align: 'center',
+                    events: operateEvents,
+                    formatter: operateFormatter
+                }
+        ]
+    });
+    $(function () {
+       /*  $('#checkAll').click(function () {
+            $table.bootstrapTable('togglePagination').bootstrapTable('checkAll').bootstrapTable('togglePagination');
+        });
+        $('#uncheckAll').click(function () {
+            $table.bootstrapTable('togglePagination').bootstrapTable('uncheckAll').bootstrapTable('togglePagination');
+        });
+        <thead>
+        <tr>
+         <th data-checkbox="true"></th>
+           				 <th data-field="shopId">网店ID</th>
+                         <th data-field="shopName">网店名称</th>
+                         <th data-field="shopUrl">网店地址</th>
+                         <th data-field="category">网店主营</th>
+                         <th data-field="shopUserName">网店店主名称</th>
+                         <th data-field="status">状态</th>
+                         <th>操作</th>
+        </tr>
+        </thead>
+         */
+    });
+    
+//});
+</script>
+{% end %}

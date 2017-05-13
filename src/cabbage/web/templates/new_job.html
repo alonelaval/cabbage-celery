@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+   
+   {% block extra_styles %}
+  		 <link href="{{ static_url('dist/css/fileinput.css') }}" media="all" rel="stylesheet" type="text/css" />
+    {% end %}
+   
+   
+{% block container %}
+             <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">新建任务</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+                {% include "message_alert.html" %}  
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            表单
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form role="form"  method="post" enctype="multipart/form-data" action="/toNewJob">
+                                        <div class="form-group">
+                                            <label>任务名称</label>
+                                            <input class="form-control" name="jobName">
+                                            <!-- <p class="help-block">Example block-level help text here.</p> -->
+                                        </div>
+                                        <!-- 
+                                        <div class="form-group">
+                                            <label>Text Input with Placeholder</label>
+                                            <input class="form-control" placeholder="Enter text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Static Control</label>
+                                            <p class="form-control-static">email@example.com</p>
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label>主执行文件</label>
+                                            <input type="file" name="mainFile">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>附件</label>
+                  								  <input id="file-5" name="attachs" class="file" type="file" multiple data-preview-file-type="any" data-upload-url="#">
+                                        </div>
+                                          <!-- 
+                                        <div class="form-group">
+                                            <label>Checkboxes</label>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="">Checkbox 1
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="">Checkbox 2
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="">Checkbox 3
+                                                </label>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label>Inline Checkboxes</label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox">1
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox">2
+                                            </label>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox">3
+                                            </label>
+                                        </div>
+                                       
+                                        <div class="form-group">
+                                            <label>Radio Buttons</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Inline Radio Buttons</label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
+                                            </label>
+                                        </div>
+                                         -->
+                                        <div class="form-group">
+                                            <label>程序类型</label>
+                                            <select class="form-control" name="proType">
+                                            	<option>python</option>
+                                                <option>shell</option>
+                                                <option>java</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>执行的集群</label>
+                                            <select id="brokerServer" class="form-control" name="brokerServer" >
+                                             	  {% for server in servers %}
+											         <option>{{server.hostName}}</option>
+											       {% end %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>执行的队列</label>
+                                            <select id="brokerQueue"  class="form-control" name="brokerQueue">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>执行策略</label>
+                                            <select class="form-control" name="runStrategy">
+                                            	<option value="-1">手动</option>
+                                                <option>once</option>
+                                                <option>crontab</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>策略值</label>
+                                            <input class="form-control" name="strategyValue">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>结果存放到</label>
+                                            <select class="form-control" name="resultBackend">
+                                            	<option>NFS</option>
+                                                <option>HDFS</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>执行参数</label>
+                                            <input class="form-control" name="params">
+                                        </div>
+                                        <button type="submit" class="btn btn-default">提交</button>
+                                        <button type="reset" class="btn btn-default">重置</button>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested)
+                                <div class="col-lg-6">
+                                    <h1>Disabled Form States</h1>
+                                    <form role="form">
+                                        <fieldset disabled>
+                                            <div class="form-group">
+                                                <label for="disabledSelect">Disabled input</label>
+                                                <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="disabledSelect">Disabled select menu</label>
+                                                <select id="disabledSelect" class="form-control">
+                                                    <option>Disabled select</option>
+                                                </select>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox">Disabled Checkbox
+                                                </label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Disabled Button</button>
+                                        </fieldset>
+                                    </form>
+                                    <h1>Form Validation States</h1>
+                                    <form role="form">
+                                        <div class="form-group has-success">
+                                            <label class="control-label" for="inputSuccess">Input with success</label>
+                                            <input type="text" class="form-control" id="inputSuccess">
+                                        </div>
+                                        <div class="form-group has-warning">
+                                            <label class="control-label" for="inputWarning">Input with warning</label>
+                                            <input type="text" class="form-control" id="inputWarning">
+                                        </div>
+                                        <div class="form-group has-error">
+                                            <label class="control-label" for="inputError">Input with error</label>
+                                            <input type="text" class="form-control" id="inputError">
+                                        </div>
+                                    </form>
+                                    <h1>Input Groups</h1>
+                                    <form role="form">
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">@</span>
+                                            <input type="text" class="form-control" placeholder="Username">
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <input type="text" class="form-control">
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon"><i class="fa fa-eur"></i>
+                                            </span>
+                                            <input type="text" class="form-control" placeholder="Font Awesome Icon">
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control">
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <input type="text" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+{% end %}
+
+{% block extra_scripts %}  
+   		<script src="{{ static_url('dist/js/fileinput.js') }}" type="text/javascript"></script>
+        <script src="{{ static_url('dist/js/locales/zh.js') }}" type="text/javascript"></script>
+        <script type="text/javascript">
+        
+        
+        
+(function(){
+	$("#file-5").fileinput({
+		    language: "zh",
+		    uploadAsync: false,
+		    showUpload:false,
+		    showCaption: false,
+	        showUpload: false,
+	        //initialPreviewAsData: false,
+	        //overwriteInitial:false,
+	        maxFilePreviewSize: 1024,
+	        initialPreview:false
+
+	});
+	f = function(){
+		_this = this;
+		var value = $(this).val();
+		
+		ajaxAsync('/queues/selectQueue',{hostName:value},true,function(data){
+			if(data.result ==0 && data.data != null){
+				$brokerQueue = $("#brokerQueue")
+				 $brokerQueue.empty()
+				if (data.data.length === 0){
+					$brokerQueue.append(' <li><a href="#">没有活动的队列</a></li>')
+					//$(_this).prop('disabled', true);
+					showErrorInfo("请先添加队列！");	
+					return 
+				}
+				for (var i=0,size = data.data.length;i<size;i++){
+					d = data.data[i]
+					$brokerQueue.append('<option>'+d+'</option')
+				}
+				
+			}else{
+				showErrorInfo("加载数据出现异常");
+			}
+		});
+	}
+	$("#brokerServer").bind("click",f);
+	$("#brokerServer").bind("change",f);
+			
+})();
+
+</script>
+        
+{% end %}     

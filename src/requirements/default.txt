@@ -1,0 +1,13 @@
+celery==3.1.24
+tornado>=4.2.0
+zope.event>=4.2.0
+zope.interface>=4.1.1
+gevent>=1.1.1
+greenlet>=0.4.9
+Beaker>=1.8.0
+kazoo>=2.2.1
+kombu==3.0.37
+apscheduler>=3.2.0
+hdfs>=2.0.11
+redis==2.10.5
+futures
