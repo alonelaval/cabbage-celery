@@ -10,10 +10,12 @@ from cabbage.web.api.work_api import WorkApi
 from cabbage.web.views.base_handler import BaseHandler
 from cabbage.web.views.json_result import JsonResult
 import json
+import tornado
 class BrokerQueueHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("queues/broker_queue.html",works=WorkApi().getWorks(),servers=BrokerServerApi().getBrokerServers())
-        
+    @tornado.web.authenticated    
     def post(self):
         queues = BrokerQueueApi().getBrokerQueue()
         
@@ -23,6 +25,7 @@ class BrokerQueueHandler(BaseHandler):
             
         
 class BrokerQueueByHostNameListHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         hostName = self.getArgument("hostName")
         jsonResult =JsonResult()
@@ -41,6 +44,6 @@ class BrokerQueueByHostNameListHandler(BaseHandler):
             jsonResult.result=JsonResult.RESULT_UNKNOWN_ERROR
             jsonResult.message ="查找服务器失败，原因：%s！" % str(e)
             self.write(jsonResult.asDict())
-            
+    @tornado.web.authenticated        
     def post(self):
         self.get()

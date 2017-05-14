@@ -7,25 +7,26 @@ Created on 2016年7月29日
 from cabbage.common.log.logger import Logger
 from cabbage.constants import JOB_DELETE
 from cabbage.event.server_jobs_event import JobRunEvent
+from cabbage.web.api.job_api import JobApi
+from cabbage.web.views.base_handler import BaseHandler
+from concurrent import futures
+from tornado import gen
+import tornado
+import zope.event
 #     JobUpdateEvent, JobRemoveEvent
 # from cabbage.process.cabbage_job_excutor import \
 #     CabbageJobExecutorHolder, CabbageJobExecutor
 # from cabbage.queue.job_queue import JobEventPoolHolder
-from cabbage.web.api.job_api import JobApi
 # from cabbage.web.api.work_api import WorkApi
-from cabbage.web.views.base_handler import BaseHandler
-from concurrent import futures
-from tornado import gen
 # import os
 # import threading
 # import time
-import tornado
-import zope.event
 
 log = Logger.getLogger(__name__)
 
         
 class JobListDataHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         limit = self.getArgument("limit")
         offset = self.getArgument("offset")
@@ -51,10 +52,12 @@ class JobListDataHandler(BaseHandler):
         self.write(m)
 
 class JobListHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("job_list.html")
         
 class RemoveJobListHandlder(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         jobId = self.getArgument("jobId")
         if not jobId or jobId=="":
@@ -79,13 +82,14 @@ class JobRunHandler(BaseHandler):
     executor =  futures.ThreadPoolExecutor(max_workers=2000)
     
 #     cabbageJobExecutor = CabbageJobExecutor()
-    
+    @tornado.web.authenticated
     def get(self):
         self.render("run_job.html")
         
     def _runJob(self,event):
         zope.event.notify(event)
-        
+    
+    @tornado.web.authenticated    
     @gen.coroutine
     def post(self):
         jobId = self.getArgument("jobId")
@@ -98,26 +102,4 @@ class JobRunHandler(BaseHandler):
             self.write("jod【%s】找不到！"%jobId)        
             return
         
-#         CabbageJobExecutorHolder.getCabbageJobExecutor().addJobEvent(JobRunEvent(jobId,params))
-        
-#         zope.event.notify(JobRunEvent(jobId,params))
-#         from cabbage.server_start import CabbageServerHolder
-#         if CabbageServerHolder.getServer().status != ON_LINE:
-#             self.write("系统还没有初始化好！")        
-#             return
-        
-#         yield tornado.gen.Task(self._runJob,JobRunEvent(jobId,params))
         tornado.ioloop.IOLoop.instance().add_callback(self._runJob,JobRunEvent(jobId,params))
-        #CabbageJobExecutorHolder.getCabbageJobExecutor().addJobEvent(JobRunEvent(jobId,params))
-        
-#         runJob = def __runJob(self,evnet):
-#                     zope.event.notify(evnet)
-            
-#         JobRunHandler.executor.submit(__runJob,JobRunEvent(jobId,params))
-#         t2 = threading.Thread(target=self.__runJob,args=(JobRunEvent(jobId,params),))
-#         t2.setDaemon(True)
-#         t2.start()
-        
-        
-#         JobEventPoolHolder.getJobEventPool().add(JobRunEvent(jobId,params))
-        

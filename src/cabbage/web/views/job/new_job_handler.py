@@ -6,8 +6,8 @@ Created on 2016年8月31日
 '''
 from cabbage.common.log.logger import Logger
 from cabbage.config import ConfigHolder
-from cabbage.constants import BASE, SERVER_FILE_DIRECTORY, PYTHON, \
-    JOB_AUTH_PASS, OFF_LINE
+from cabbage.constants import BASE, SERVER_FILE_DIRECTORY, PYTHON, JOB_AUTH_PASS, \
+    OFF_LINE
 from cabbage.data.entity import Job, File
 from cabbage.event.server_jobs_event import JobAuditEvent
 from cabbage.web.api.broker_queue_api import BrokerQueueApi
@@ -17,14 +17,17 @@ from cabbage.web.api.work_api import WorkApi
 from cabbage.web.views.base_handler import BaseHandler
 import os
 import time
+import tornado
 import zope.event
 log = Logger.getLogger(__name__)
 
 class NewJobHandler(BaseHandler):
     python_type=u"text/x-python-script"
+    
+    @tornado.web.authenticated
     def get(self):
         self.render("new_job.html",works=WorkApi().getWorks(),servers=BrokerServerApi().getBrokerServers())
-        
+    @tornado.web.authenticated    
     def post(self):
         try:
             jobName= self.getArgument("jobName")

@@ -7,9 +7,12 @@ Created on 2016年8月24日
 from cabbage.web.api.job_api import JobApi
 from cabbage.web.views.base_handler import BaseHandler
 import json
+import tornado
 class JobRunListHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("run_job_list.html")
+    @tornado.web.authenticated
     def post(self):
         jobApi= JobApi()
         jobMoniotrs =jobApi.getRunJobs()

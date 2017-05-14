@@ -8,15 +8,15 @@ from cabbage.common.log.logger import Logger
 from cabbage.common.zookeeper.zookeeper_client_holder import \
     ZookeeperClientHolder
 from cabbage.config import ConfigHolder
-from cabbage.constants import BASE, SERVER_FILE_DIRECTORY, MASTER, \
-    CABBAGE
+from cabbage.constants import BASE, SERVER_FILE_DIRECTORY, MASTER, CABBAGE, \
+    ADMIN_NAME, ADMIN_PWD
+from cabbage.data.entity import User
 from cabbage.data.store_holder import StoreHolder
 from cabbage.event.server_jobs_event import registerServerEvent
 from cabbage.utils.util import singleton
-from cabbage.watch.web_server_watch import configWatch, workWatch, \
-    jobWebWatch, brokerServerWatch
-from cabbage.web.cabbage_application import \
-    CabbageApplicationContorl
+from cabbage.watch.web_server_watch import configWatch, workWatch, jobWebWatch, \
+    brokerServerWatch
+from cabbage.web.cabbage_application import CabbageApplicationContorl
 import os
 import sys
 import tornado.ioloop
@@ -65,6 +65,9 @@ class CabbageWebServer():
             
         if not self.kazooClient.isExistPath("/cabbage/users"):
             self.kazooClient.create("/cabbage/users", makepath=True)
+            if not self.kazooClient.isExistPath("/cabbage/users/"+ConfigHolder.getConfig().getProperty(BASE,ADMIN_NAME)):
+                self.store.saveUser(User(userName=ConfigHolder.getConfig().getProperty(BASE,ADMIN_NAME),
+                                         userPwd=ConfigHolder.getConfig().getProperty(BASE,ADMIN_PWD),isAdmin=True))
             
             
         if not self.kazooClient.isExistPath("/cabbage/queueServer"):

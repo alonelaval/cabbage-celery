@@ -7,11 +7,13 @@ Created on 2016年9月27日
 from cabbage.web.api.config_api import ConfigApi
 from cabbage.web.views.base_handler import BaseHandler
 import json
+import tornado
 
 class ConfigHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("config/config.html")
-        
+    @tornado.web.authenticated    
     def post(self):
         configs =ConfigApi().getConfigs()
         

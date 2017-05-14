@@ -9,11 +9,13 @@ from cabbage.web.api.broker_queue_api import BrokerQueueApi
 from cabbage.web.api.broker_server_api import BrokerServerApi
 from cabbage.web.api.work_api import WorkApi
 from cabbage.web.views.base_handler import BaseHandler
+import tornado
 import traceback
 # from cabbage.web.views.json_result import JsonResult
 log = Logger.getLogger(__name__)
         
 class AddBrokerQueueNodeHandler(BaseHandler):
+    @tornado.web.authenticated
     def post(self):
         brokerQueue  = self.getArgument("brokerQueue")
 #         exchange = self.getArgument("exchange")

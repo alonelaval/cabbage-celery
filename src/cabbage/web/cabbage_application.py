@@ -9,26 +9,22 @@ from cabbage.config import ConfigHolder
 from cabbage.constants import BASE, SERVER_WEB_PORT
 from cabbage.web.settings import settings
 from cabbage.web.views.config.conifg_handler import ConfigHandler
-from cabbage.web.views.job.job_run_list_handler import \
-    JobRunListHandler
+from cabbage.web.views.job.job_run_list_handler import JobRunListHandler
 from cabbage.web.views.job.new_job_handler import NewJobHandler
-from cabbage.web.views.job_handler import JobRunHandler, \
-    JobListHandler, JobListDataHandler, RemoveJobListHandlder
-from cabbage.web.views.main_handler import MainHandler
+from cabbage.web.views.job_handler import JobRunHandler, JobListHandler, \
+    JobListDataHandler, RemoveJobListHandlder
+from cabbage.web.views.main_handler import MainHandler, LoginHandler
 from cabbage.web.views.queues.add_broker_queue_handler import \
     AddBrokerQueueHandler
 from cabbage.web.views.queues.add_broker_queue_node_handler import \
     AddBrokerQueueNodeHandler
 from cabbage.web.views.queues.add_broker_server_handler import \
     AddBrokerServerHandler
-from cabbage.web.views.queues.broker_queue_handler import \
-    BrokerQueueHandler, BrokerQueueByHostNameListHandler
-from cabbage.web.views.queues.broker_server_handler import \
-    BrokerServerHandler
-from cabbage.web.views.settings.settings_handler import \
-    SettingsHandler
-from cabbage.web.views.work.work_status_handler import \
-    WorkStatusHandler
+from cabbage.web.views.queues.broker_queue_handler import BrokerQueueHandler, \
+    BrokerQueueByHostNameListHandler
+from cabbage.web.views.queues.broker_server_handler import BrokerServerHandler
+from cabbage.web.views.settings.settings_handler import SettingsHandler
+from cabbage.web.views.work.work_status_handler import WorkStatusHandler
 from cabbage.web.views.work_handler import WorkListHandler
 from tornado.httpserver import HTTPServer
 import os
@@ -65,13 +61,13 @@ class CabbageApplicationContorl(object):
             (r"/queues/addBrokerServer", AddBrokerServerHandler),
             (r"/config", ConfigHandler),
             (r"/settings", SettingsHandler),
+            (r"/login", LoginHandler),
             
             
         ], debug=False,**settings)
       
         
         port =ConfigHolder.getConfig().getProperty(BASE, SERVER_WEB_PORT)
-#         application.listen(int(port))
         
         sockets = tornado.netutil.bind_sockets(port)
         tornado.process.fork_processes(8)
@@ -80,12 +76,5 @@ class CabbageApplicationContorl(object):
         log.info("web服务启动成功,端口：%s........."%port)
 
 if __name__ == "__main__":
-#     application = CabbageApplication([
-#         (r"/", MainHandler),
-#         (r"/toNewJob", NewJobHandler),
-#     ], debug=True,**settings)
-#     application.listen(8888)
     CabbageApplicationContorl().start()
-    print os.getpid()
-#     print id(ZookeeperClientHolder.getRetryClient())
     tornado.ioloop.IOLoop.current().start()

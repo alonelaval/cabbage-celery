@@ -7,9 +7,12 @@ Created on 2016年8月24日
 from cabbage.web.api.work_api import WorkApi
 from cabbage.web.views.base_handler import BaseHandler
 import json
+import tornado
 class WorkListHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("work_list.html")
+    @tornado.web.authenticated
     def post(self):
         works =WorkApi().getWorks()
 #         m ={}

@@ -28,6 +28,8 @@
 
     <!-- Custom Fonts -->
     <link href="{{ static_url('bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ static_url('dist/css/sticky-footer-navbar.css') }}" rel="stylesheet"> 
+    
     
     {% block extra_styles %}
     {% end %}
@@ -446,8 +448,15 @@
 			{% end %}           
         </div>
         <!-- /#page-wrapper -->
-
+		
     </div>
+    
+    <footer class="footer">
+      <div style="text-align: right; valign:middle; margin-right: 50px; margin-top: 15px;">
+        <p class="text-muted">Powered by alonelaval@gmail.com,120huawei@163.com</p>
+      </div>
+    </footer>
+    
     <!-- /#wrapper -->
     <!-- jQuery -->
     <script src="{{ static_url('bower_components/jquery/dist/jquery.min.js') }}"></script>

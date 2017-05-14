@@ -37,6 +37,8 @@ QUEUE                               ="queue"
 BROKER_SERVERS                      ="brokerServers"
 QUEUES                              ="queues"
 SERVER                              ="server"
+ADMIN_NAME                          ="adminName"
+ADMIN_PWD                           ="adminPwd"
 
 REULST_BACKEND                      ="resultBackend"
 

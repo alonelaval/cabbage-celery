@@ -7,9 +7,11 @@ Created on 2016年9月1日
 from cabbage.common.log.logger import Logger
 from cabbage.web.api.broker_server_api import BrokerServerApi
 from cabbage.web.views.base_handler import BaseHandler
+import tornado
 log = Logger.getLogger(__name__)
         
 class AddBrokerServerHandler(BaseHandler):
+    @tornado.web.authenticated
     def post(self):
         hostName = self.getArgument("hostName")
         ip  = self.getArgument("ip")

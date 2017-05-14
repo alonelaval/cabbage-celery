@@ -7,17 +7,17 @@ Created on 2016年6月8日
 from cabbage.common.log.logger import Logger
 from cabbage.common.zookeeper.zookeeper_client_holder import \
     ZookeeperClientHolder
-from cabbage.constants import CABBAGE, JOBS, JOB_NAME, FILE_PATH, \
-    FILE_NAME, FILE_TYPE, STATUS, AUDIT_STATUS, RUN_STRATEGY, ATTACH_FILES, WORKS, \
-    FILES, JOB_ID, AUTHS, AUDIT_USER, AUDIT_TIME, USER_PWD, IS_ADMIN, USERS, LIST, \
-    READIES, PORT, IP, DONE, STRATEGY_VALUE, QUEUE_SERVER, QUEUES, EXCHANGE, \
-    ROUTING_KEY, SERVER, BROKER_SERVERS, CONNECT_URI, SERVER_TYPE, BROKER_SERVER, \
-    QUEUE, TASKS, DO_SOMETHING, DO_NOTHING, MONITOR, TASK_COUNT, TASK_SUCCEEDED, \
-    TASK_FAILED, TASK_RUNTIME, DATES, TASK_QUEUE_TIME, CONFIG, DESC, REULST_BACKEND, \
-    RESULTS, SERVICE_STATUS, TASK_RECEIVED
-from cabbage.data.entity import File, Work, Job, Auth, User, \
-    BrokerQueue, BrokerServer, TaskMonitor, JobMonitor, WorkMonitor, DateMonitor, \
-    BrokerMonitor, Config
+from cabbage.constants import CABBAGE, JOBS, JOB_NAME, FILE_PATH, FILE_NAME, \
+    FILE_TYPE, STATUS, AUDIT_STATUS, RUN_STRATEGY, ATTACH_FILES, WORKS, FILES, \
+    JOB_ID, AUTHS, AUDIT_USER, AUDIT_TIME, USER_PWD, IS_ADMIN, USERS, LIST, READIES, \
+    PORT, IP, DONE, STRATEGY_VALUE, QUEUE_SERVER, QUEUES, EXCHANGE, ROUTING_KEY, \
+    SERVER, BROKER_SERVERS, CONNECT_URI, SERVER_TYPE, BROKER_SERVER, QUEUE, TASKS, \
+    DO_SOMETHING, DO_NOTHING, MONITOR, TASK_COUNT, TASK_SUCCEEDED, TASK_FAILED, \
+    TASK_RUNTIME, DATES, TASK_QUEUE_TIME, CONFIG, DESC, REULST_BACKEND, RESULTS, \
+    SERVICE_STATUS, TASK_RECEIVED
+from cabbage.data.entity import File, Work, Job, Auth, User, BrokerQueue, \
+    BrokerServer, TaskMonitor, JobMonitor, WorkMonitor, DateMonitor, BrokerMonitor, \
+    Config
 from cabbage.data.store import Store
 from kazoo.retry import KazooRetry
 from zope.interface.declarations import implementer
@@ -224,7 +224,7 @@ class ZookeeperStore(object):
         parent="/"+CABBAGE+"/"+USERS+"/"+user.userName
         self.client.create(parent,makepath=True)
         self.client.create(parent+"/"+USER_PWD, value = user.userPwd)
-        self.client.create(parent+"/"+IS_ADMIN, value = user.isAdmin)
+        self.client.create(parent+"/"+IS_ADMIN, value = "1" if user.isAdmin else "0")
         
     def getUsers(self):
         parent="/"+CABBAGE+"/"+USERS
@@ -236,9 +236,12 @@ class ZookeeperStore(object):
         
     def getUser(self,userName):
         parent="/"+CABBAGE+"/"+USERS+"/"+userName
-        userPwd =  self.client.getData(parent+"/"+USER_PWD)
-        isAdmin = self.client.getData(parent+"/"+IS_ADMIN)
-        return User( userName=userName,userPwd=userPwd,isAdmin=bool(isAdmin))
+        if self.client.isExistPath(parent):
+            userPwd =  self.client.getData(parent+"/"+USER_PWD)
+            isAdmin = self.client.getData(parent+"/"+IS_ADMIN)
+            isAdmin  = True if isAdmin =='1' else False
+            return User( userName=userName,userPwd=userPwd,isAdmin=bool(isAdmin))
+        return None
     
     def getWork(self,hostName):
         parent="/"+CABBAGE+"/"+WORKS+"/"+hostName
@@ -695,8 +698,15 @@ class ZookeeperStore(object):
         self.client.create(parent+"/"+QUEUES+"/"+brokerQueue.queueName)
     
     
-    def addUser(self,user):
-        pass
+#     def addUser(self,user):
+#         parent="/"+CABBAGE+"/"+USERS+"/"+user.userName
+#         if not self.client.isExistPath(parent):
+#             self.client.create(parent)
+#             self.client.create(parent+"/"+USER_PWD,value=user.userPwd)
+#             self.client.create(parent+"/"+IS_ADMIN,value=user.isAdmin)
+        
+        
+        
     
     
     

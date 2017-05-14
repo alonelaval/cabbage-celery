@@ -9,8 +9,11 @@ Created on 2016年10月10日
 # from cabbage.machine.celery_work_contorl import CeleryWorkContorl
 from cabbage.web.api.work_api import WorkApi
 from cabbage.web.views.base_handler import BaseHandler
+import tornado
 
 class WorkStatusHandler(BaseHandler):
+    
+    @tornado.web.authenticated
     def post(self):
         hostName = self.getArgument("hostName")
         status = self.getArgument("status")

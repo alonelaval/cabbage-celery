@@ -4,14 +4,16 @@ Created on 2016年8月1日
 
 @author: hua
 '''
+from cabbage.web.api.user_api import UserApi
 from torndsession.sessionhandler import SessionBaseHandler
 class BaseHandler(SessionBaseHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
-    def getCurrentUserFromSession(self):
-        return self.session['user'] 
+ 
     def getArgument(self,name):
         return self.getStrArgument(name)
+    
+
     
     def getArguments(self,name):
         return self.get_arguments("%s[]"%name)
@@ -27,6 +29,6 @@ class BaseHandler(SessionBaseHandler):
         if 'user' in self.session:
             return self.session['user'] 
         else:
-#             user = User().getUser(self.get_current_user())
+            user = UserApi().getUser(self.get_current_user())
             self.session['user'] = user
             return user
