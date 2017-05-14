@@ -140,6 +140,8 @@ adminPwd=123456
 公司应用的最大的一个集群，其余几个也有4，5十台机器，专门用来采集网络上的数据：
 ![样例](https://github.com/alonelaval/cabbage/blob/master/img/cluster.png?raw=true) 
 
+## 样本：samples目录
+
 
 
 
