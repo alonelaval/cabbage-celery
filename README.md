@@ -1,9 +1,9 @@
-#cabbage   
-##大白菜 为什么叫这个，因为基于celery 所以叫大白菜   
+# cabbage   
+## 大白菜 为什么叫这个，因为基于celery 所以叫大白菜   
 
 cabbage是一个分布式的任务调度框架，现在以实现动态添加机器，动态扩容队列，动态实现任务的布置与删除
 
-##配置信息  
+## 配置信息  
 启动,下载[源码zip包](https://github.com/alonelaval/cabbage/archive/master.zip)，解压缩，进入目录编辑 **cabbage.cfg** 配置文件，如下：
 
 ```
@@ -51,13 +51,13 @@ adminName=admin
 # web管理员密码
 adminPwd=123456
 ```
-##服务端启动   
+## 服务端启动   
 设置好配置文件，进入bin目录，执行：cabbageServer.sh,待控制台打印 **系统初始化完成！**，打开浏览器，访问**http://127.0.0.1:2048/**，输入用户名和密码，即可登录WEB管理系统。
-##客户端启动   
+## 客户端启动   
 设置好配置文件，进入bin目录，执行：cabbageClient.sh,待控制台打印 **ready.！**，即代表客户端已经启动。   
 
-##创建我的第一个任务   
-###服务端代码：   
+## 创建我的第一个任务   
+### 服务端代码：   
 创建 **test\_ubuntu\_main.py** 文件，拷贝下面的代码：
 
 	# -*- encoding: utf-8 -*-
@@ -84,7 +84,7 @@ adminPwd=123456
 
 
 
-###客户端代码   
+### 客户端代码   
 创建 **test\_ubuntu\_task.py** 文件，拷贝下面的代码：  
 
 	# -*- encoding: utf-8 -*-
@@ -110,13 +110,13 @@ adminPwd=123456
 	        return aaa  * bbb
    
  
-##WEB端添加队列服务器   
-###添加队列服务器   
+## WEB端添加队列服务器   
+### 添加队列服务器   
 登录系统**http://127.0.0.1:2048/**,进入**队列服务器管理>队列服务器（集群）管理，点击添加队列服务器**，如下图:
 ![添加队列服务器](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueueServer.png)
 点击提交后：
 ![添加队列服务器成功](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueueServerSuccess.png)
-###添加队列  
+### 添加队列  
 进入**队列服务器管理>队列管理，点击添加队列**，如下图:   
 ![添加队列](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueue.png)
 点击提交后：
@@ -124,14 +124,14 @@ adminPwd=123456
 客户端控制台输出添加队列后的记录：
 ![添加队列成功](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/console_queue.png)   
 即可看到新添加的队列已经成功，但是还没有任务提交在系统中，下面我们将添加我们的第一个任务，并执行该任务。   
-##执行任务  
-###提交任务   
+## 执行任务  
+### 提交任务   
 登录系统**http://127.0.0.1:2048/**,进入**任务管理>新建任务，输入参数，提交任务，如下图:
 ![添加任务](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addJob.png)
 客户端控制台输出添加任务后的记录：
 ![添加任务成功](https://github.com/alonelaval/cabbage/blob/master/img/console_job.png?raw=true)
 即可看到新添加的任务已经成功的提交到系统中，添加任务成功后，界面将输出该任务的JOBID。
-###执行任务   
+### 执行任务   
 登录系统**http://127.0.0.1:2048/**,进入**任务管理>运行指定任务，输入JOBID和参数，如下图:
 ![执行任务](https://github.com/alonelaval/cabbage/blob/master/img/exec_job.png?raw=true)  
 客户端控制台输出任务执行后的记录：  
