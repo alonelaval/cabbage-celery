@@ -18,18 +18,5 @@ class TestUbuntuMain(CabbageMain):
         print self.job.brokerServer
         print self.getApp().tasks
         print "CELERY_ROUTES:[%s]" % self.getApp().conf["CELERY_ROUTES"] 
-#         TestUbuntuTask.bind(self.getApp())
-#         task = TestUbuntuTask()
-#         result = task.apply_async((1,2,args[0]),expires=5)
         self.apply_async(TestUbuntuTask,(1,2,args[0]),expires=5)
-#         delay(1,2,expires=5)
-#         while(1):
-#             if result.ready():
-#                 print "result:"+str(result.result)
-#                 break
-#             if result.failed():
-#                 print "result:"+str(result.result)
-#                 break
-#             print result.status
-#             time.sleep(2)
 
