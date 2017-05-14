@@ -111,7 +111,29 @@ adminPwd=123456
    
  
 ##WEB端添加队列服务器
-登录系统**http://127.0.0.1:2048/**,进入**队列服务器管理>队列服务器（集群）管理，点击添加队列服务器，如下图
+###添加队列服务器
+登录系统**http://127.0.0.1:2048/**,进入**队列服务器管理>队列服务器（集群）管理，点击添加队列服务器**，如下图:
+![添加队列服务器](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueueServer.png)
+点击提交后：
+![添加队列服务器成功](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueueServerSuccess.png)
+###添加队列
+进入**队列服务器管理>队列管理，点击添加队列**，如下图:   
+![添加队列](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueue.png)
+点击提交后：
+![添加队列成功](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addQueueSuccess.png)
+客户端控制台输出添加队列后的记录：
+![添加队列成功](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/console_queue.png)
+即可看到新添加的队列已经成功，但是还没有任务提交在系统中，下面我们将添加我们的第一个任务，并执行该任务。
+##执行任务
+###提交任务
+登录系统**http://127.0.0.1:2048/**,进入**任务管理>新建任务，输入参数，提交任务，如下图:
+![添加任务](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addJob.png)
+客户端控制台输出添加任务后的记录：
+![添加任务成功](https://github.com/alonelaval/cabbage/blob/master/img/console_job.png?raw=true)
+即可看到新添加的任务已经成功的提交到系统中，添加任务成功后，界面将输出该任务的JOBID。
+###执行任务
+登录系统**http://127.0.0.1:2048/**,进入**任务管理>运行指定任务，输入JOBID和参数，如下图:
+![添加任务](https://raw.githubusercontent.com/alonelaval/cabbage/master/img/addJob.png)
 
 
 
