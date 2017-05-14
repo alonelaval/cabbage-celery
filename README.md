@@ -136,6 +136,9 @@ adminPwd=123456
 ![执行任务](https://github.com/alonelaval/cabbage/blob/master/img/exec_job.png?raw=true)  
 客户端控制台输出任务执行后的记录：  
 ![执行任务记录](https://github.com/alonelaval/cabbage/blob/master/img/console_exec_job.png?raw=true)  
+## 应用场景
+公司应用的最大的一个集群，其余几个也有4，5十台机器，专门用来采集网络上的数据：
+![样例](https://github.com/alonelaval/cabbage/blob/master/img/cluster.png?raw=true) 
 
 
 
