@@ -19,17 +19,20 @@ class AddBrokerQueueHandler(BaseHandler):
     def post(self):
         brokerServer = self.getArgument("brokerServer")
         brokerQueue  = self.getArgument("brokerQueue")
-        exchange = self.getArgument("exchange")
-        routingKey = self.getArgument("routingKey")
+#       exchange =self.getArgument("brokerQueue") # self.getArgument("exchange")
+#       routingKey = self.getArgument("routingKey")
         nodes  = self.get_arguments("nodes")
+        priority =self.getArgument("priority")
         
+        exchange = brokerQueue
+        routingKey = brokerQueue
         try: 
             if brokerServer and brokerQueue:
                 brokerApi= BrokerQueueApi()
                 if brokerApi.isExistQueueName(brokerQueue):
                     raise Exception("队列名称已经存在！")
                 
-                brokerApi.addQueue(brokerServer, brokerQueue, exchange, routingKey, nodes)
+                brokerApi.addQueue(brokerServer, brokerQueue, exchange, routingKey, nodes,priority)
                 
 #                 print brokerQueue,routingKey,exchange,nodes
                 self.render("queues/broker_queue.html",message="添加成功！",works=WorkApi().getWorks(),servers=BrokerServerApi().getBrokerServers())

@@ -7,8 +7,8 @@ Created on 2016年9月8日
 
 
 from celery.app.base import Celery
-from celery.app.task import Task
-from celery.registry import tasks
+from celery import Task
+# from celery.registry import tasks
 import os
 import threading
 import time
@@ -16,6 +16,13 @@ import time
 test ="amqp://cabbage_celery:cabbage_celery@172.16.4.134:5672/cabbage_vhost"
 app = Celery('cabbage',backend="rpc://",broker=test)
         
+
+class Hello(app.Task):
+    send_error_emails = True
+
+    def run(self, to):
+        return 'hello {0}'.format(to)
+    
 def run():
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.current")
         os.environ.setdefault("DJANGO_PROJECT_DIR",
@@ -23,11 +30,7 @@ def run():
         app.worker_main()
         
 
-class Hello(Task):
-    send_error_emails = True
 
-    def run(self, to):
-        return 'hello {0}'.format(to)
     
 if __name__=="__main__":
     t1 = threading.Thread(target=run)
@@ -35,6 +38,6 @@ if __name__=="__main__":
     t1.start()
     time.sleep(10)
     print "test"
-    tasks.register(Hello)
+#     tasks.register(Hello)
     print "test2"
     t1.join()

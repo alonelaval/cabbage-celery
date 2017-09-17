@@ -22,7 +22,7 @@ from cabbage.utils.host_name import HOST_NAME, LOCAL_IP
 from cabbage.utils.util import singleton
 from cabbage.watch.client_jobs_watch import jobChildWatch, \
     workBrokerQueueWatch, workStatusWatch
-from cabbage.watch.server_jobs_watch import configWatch
+from cabbage.watch.monitor_server_watch import configWatch
 import os
 import sys
 import threading
@@ -97,7 +97,7 @@ class CabbageClient():
         self.kazooClient.addDataListener("/cabbage/works/"+HOST_NAME+"/"+STATUS,workStatusWatch)
         
         #创建临时路径，在节点死的时候，服务端收到信号
-        self.kazooClient.create("/cabbage/works/"+HOST_NAME+"/"+ON_LINE,ephemeral=True)
+#         self.kazooClient.create("/cabbage/works/"+HOST_NAME+"/"+ON_LINE,ephemeral=True)
         
         
         self.t1 = threading.Thread(target=run)

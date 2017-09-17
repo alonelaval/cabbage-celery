@@ -5,7 +5,7 @@ Created on 2016年6月15日
 @author: hua
 '''
 from celery.app.base import Celery
-from celery.contrib.methods import task_method
+# from celery.contrib.methods import task_method
 from cabbage.utils.host_name import HOST_NAME
 import os
 # from cabbage.utils.util import singleton
@@ -28,12 +28,15 @@ class Cabbage():
 #                               os.path.dirname(os.path.realpath(__file__)))
         self.app.config_from_object('cabbage.cabbage_celery.celeryconfig')
        
+    def register_task(self,taskObj):
+        self.app.register_task(taskObj)
         
     def start(self):
         argv =['worker',
                '--without-mingle',
                '--without-gossip',
 #                '--without-heartbeat'
+            '--loglevel=info'
                ]
         self.app.worker_main(argv)
     
@@ -41,14 +44,14 @@ class Cabbage():
         argv =['--autoreload']
         self.app.worker_main(argv)
     
-    @DeprecationWarning
-    def addTask(self,fun,name=None):
-        if name:
-            name=fun.name
-        @self.app.task(bind=True,filter=task_method,name=name)
-        def f(fun):
-            return fun
-        
+#     @DeprecationWarning
+#     def addTask(self,fun,name=None):
+#         if name:
+#             name=fun.name
+#         @self.app.task(bind=True,filter=task_method,name=name)
+#         def f(fun):
+#             return fun
+#         
     def taskList(self):
         return self.app.tasks().items()
     
@@ -62,7 +65,8 @@ class Cabbage():
         return self.app
     
     def ping(self,hostName=HOST_NAME):
-        return self.app.control.ping(timeout=2,destination=["celery@%s"%hostName])
+#         print hostName
+        return self.app.control.ping(timeout=5,destination=["celery@%s"%hostName])
     #add is alive
     def workIsAlive(self,hostName):
         if len(self.ping(hostName)) >0:

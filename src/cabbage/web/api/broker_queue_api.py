@@ -95,7 +95,7 @@ class BrokerQueueApi(object):
     def isExistQueueName(self,store,queueName):
         return store.isExistQueue(queueName)
     @excute
-    def addQueue(self,store,brokerServer,brokerQueue,exchange,routingKey,nodes):
+    def addQueue(self,store,brokerServer,brokerQueue,exchange,routingKey,nodes,priority):
         exchange = exchange if exchange else brokerQueue
         routingKey = routingKey if routingKey else brokerQueue
         workApi=WorkApi()
@@ -112,8 +112,8 @@ class BrokerQueueApi(object):
         brokerServer=brokerServer.split(":")[0]
         server =  store.getBrokerServer(brokerServer)
         client = KombuClient(url=server.connectUri)
-        client.addQueue(brokerQueue,exchangeName=exchange,routingKey=routingKey)
-        queue  = BrokerQueue(server=brokerServer,queueName=brokerQueue,exchangeName=exchange,routingKey=routingKey,works=[work.hostName for work in works])
+        client.addQueue(brokerQueue,exchangeName=exchange,routingKey=routingKey,priority=priority)
+        queue  = BrokerQueue(server=brokerServer,queueName=brokerQueue,exchangeName=exchange,routingKey=routingKey,works=[work.hostName for work in works],priority=priority)
         
         store.saveQueue(queue)
         store.addServerBrokerQueue(server, queue)

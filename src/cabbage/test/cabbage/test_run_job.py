@@ -22,15 +22,19 @@ ubuntu="job-6911124b-1f7c-4acc-a155-fb4513b74bc2"
 # 
 # nfs="job-57cebce9-8eff-4853-9ac4-e119cd8235f4"
 
+long_time="job-37679f6c-8d07-4deb-afd9-b66549b78161"
+shot_time="job-71d2c8e5-9c06-4e6c-ab81-d105808ca5e0"
+
+
 url="http://127.0.0.1:2048/runJob"
 # url ="http://101.198.156.26:2048/runJob"
 
 begin=  getNow()
-for i in range(10):
+for i in range(100):
 #     time.sleep(1)
     print i
 #     requests.post(url, data = {'jobId':mac,"params":i})
-    requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':both})
-    requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':mac})
-    requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':ubuntu})
+    requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':shot_time})
+#     requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':mac})
+#     requests.post("http://127.0.0.1:2048/runJob", data = {'jobId':ubuntu})
 print "begin:【%s】 end:【%s】"%(begin,getNow())

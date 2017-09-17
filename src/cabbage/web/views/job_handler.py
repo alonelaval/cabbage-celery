@@ -89,7 +89,7 @@ class JobRunHandler(BaseHandler):
     def _runJob(self,event):
         zope.event.notify(event)
     
-    @tornado.web.authenticated    
+#     @tornado.web.authenticated    
     @gen.coroutine
     def post(self):
         jobId = self.getArgument("jobId")

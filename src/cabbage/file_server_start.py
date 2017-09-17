@@ -5,11 +5,13 @@ Created on 2016年6月8日
 @author: hua
 '''
 from cabbage.common.log.logger import Logger
-from cabbage.common.zookeeper.zookeeper_client_holder import ZookeeperClientHolder
+from cabbage.common.zookeeper.zookeeper_client_holder import \
+    ZookeeperClientHolder
 from cabbage.config import ConfigHolder
 from cabbage.constants import BASE, SERVER_FILE_DIRECTORY
 from cabbage.data.store_holder import StoreHolder
 from cabbage.net.server_gevent import GeventStreamServer
+from cabbage.utils.util import singleton
 from cabbage.watch.server_jobs_watch import configWatch
 import os
 import sys
@@ -24,7 +26,7 @@ def start_server():
     geventServer.start()
     
     
-@singleton    
+@singleton
 class CabbageFileServer():
     def __init__(self,cfgPath=None):
         path = ConfigHolder.getConfig(cfgPath=cfgPath).getProperty(BASE,SERVER_FILE_DIRECTORY)

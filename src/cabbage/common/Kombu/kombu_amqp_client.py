@@ -13,12 +13,12 @@ class KombuClient(object):
         self.conn = Connection(self.url)
        
     
-    def addQueue(self,queueName,exchangeName=None,routingKey=None):
+    def addQueue(self,queueName,exchangeName=None,routingKey=None,priority=1):
         self._connect()
         exchangeName = exchangeName if exchangeName else queueName
         routingKey = routingKey if routingKey else queueName
         
-        science_news = Queue(queueName,exchange=Exchange(exchangeName),routing_key=routingKey)
+        science_news = Queue(queueName,exchange=Exchange(exchangeName),routing_key=routingKey,max_priority=priority)
         chan = self.conn.channel()
         try:
             bound_science_news = science_news(chan)

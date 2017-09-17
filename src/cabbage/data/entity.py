@@ -88,12 +88,13 @@ class BrokerServer(BaseEntity):
         self.works = works if works else []
         
 class BrokerQueue(BaseEntity):
-    def __init__(self,server=None,queueName=None,exchangeName=None,routingKey=None,works=None):
+    def __init__(self,server=None,queueName=None,exchangeName=None,routingKey=None,works=None,priority=None):
         self.server=server
         self.queueName=queueName
         self.exchangeName=exchangeName
         self.routingKey=routingKey
         self.works = works if works else []
+        self.priority = priority if priority else 1
 
 
 class BaseMonitor(BaseEntity):

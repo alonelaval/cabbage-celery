@@ -14,7 +14,7 @@ from cabbage.constants import CABBAGE, JOBS, JOB_NAME, FILE_PATH, FILE_NAME, \
     SERVER, BROKER_SERVERS, CONNECT_URI, SERVER_TYPE, BROKER_SERVER, QUEUE, TASKS, \
     DO_SOMETHING, DO_NOTHING, MONITOR, TASK_COUNT, TASK_SUCCEEDED, TASK_FAILED, \
     TASK_RUNTIME, DATES, TASK_QUEUE_TIME, CONFIG, DESC, REULST_BACKEND, RESULTS, \
-    SERVICE_STATUS, TASK_RECEIVED
+    SERVICE_STATUS, TASK_RECEIVED, PRIORITY
 from cabbage.data.entity import File, Work, Job, Auth, User, BrokerQueue, \
     BrokerServer, TaskMonitor, JobMonitor, WorkMonitor, DateMonitor, BrokerMonitor, \
     Config
@@ -322,6 +322,7 @@ class ZookeeperStore(object):
         self.client.create(parent+"/"+ROUTING_KEY, value = q.routingKey)
         self.client.create(parent+"/"+SERVER, value = q.server)
         self.client.create(parent+"/"+WORKS)
+        self.client.create(parent+"/"+PRIORITY,value = q.priority)
         if q.works:
             for w in q.works:
                 self.client.create(parent+"/"+WORKS+"/"+w)
@@ -360,8 +361,11 @@ class ZookeeperStore(object):
         routingKey = self.client.getData(parent+"/"+ROUTING_KEY)
         serverHostName =self.client.getData(parent+"/"+SERVER)
         works = self.client.getChildren(parent+"/"+WORKS)
+        priority = 1
+        if self.client.isExistPath(parent+"/"+PRIORITY):
+            priority = self.client.getData(parent+"/"+PRIORITY)
         
-        return BrokerQueue(server=serverHostName,queueName=queueName,exchangeName=exchange,routingKey=routingKey,works=works)
+        return BrokerQueue(server=serverHostName,queueName=queueName,exchangeName=exchange,routingKey=routingKey,works=works,priority=priority)
     
     def isExistQueue(self,queueName):
         parent="/"+CABBAGE+"/"+QUEUE_SERVER+"/"+QUEUES+"/"+queueName

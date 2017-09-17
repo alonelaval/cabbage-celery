@@ -28,14 +28,10 @@ resultUploadScheduler=10 * * * *
 celerydConcurrency=1
 #web端地址，文件服务器地址
 serverIp=172.16.4.1
-#节点之间通讯的短裤
+#节点之间通讯的端口
 serverPort=1024
-#管理的端口
+#web管理的端口
 serverWebPort=2048
-#好像没有用
-uploadHdfsFileProcessCount=10
-#好像没用用
-jobExecutorCount=2000 
 
 #用户上传的任务在服务器端的存放地址
 serverFileDirectory=/Users/hua/workspace/python/cabbage/server_file_path

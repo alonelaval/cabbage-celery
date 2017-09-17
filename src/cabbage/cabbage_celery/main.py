@@ -43,6 +43,7 @@ class CabbageMain(object):
     '''
     def apply_async(self,cls,args=None,kwargs=None,**options):
         cls.bind(self.getApp())
+       
         obj = cls()
         if kwargs:
             kwargs[JOB_ID]= self.job.jobId
@@ -53,7 +54,7 @@ class CabbageMain(object):
         if isCabbageTask(cls):
             taskName = cls.__module__  +"."+ cls.__name__
 #         print taskName 
-
+        self.getApp().register_task(obj)
         result =obj.apply_async(args=args,task_id=self.getTaskId(taskName),kwargs=kwargs,**options)
         return result
 #         self._addTaskTrack(taskName,result.id)
@@ -61,12 +62,13 @@ class CabbageMain(object):
     def getTaskId(self,taskName):
         return str(uuid.uuid4()) +"@"+ self.job.jobId+"@"+taskName 
     
-    def send_task(self,taskName,args=None,kwargs=None):
+    def send_task(self,taskName,args=None,kwargs=None,**options):
         if kwargs:
             kwargs[JOB_ID] = self.job.jobId
         else:
             kwargs= {JOB_ID: self.job.jobId}
-        result =self.getApp().send_task(taskName,task_id=self.getTaskId(taskName), args=args,kwargs=kwargs)
+            
+        result =self.getApp().send_task(taskName,task_id=self.getTaskId(taskName), args=args,kwargs=kwargs,**options)
 #         self._addTaskTrack(taskName,result.id)
         return result
                 

@@ -41,7 +41,7 @@ CELERY_SEND_EVENTS=True
  
 BROKER_HEARTBEAT = 0
 
-CELERY_QUEUES = ( Queue('celery', Exchange('celery'), routing_key='celery'),)
+# CELERY_QUEUES = ( Queue('celery', Exchange('celery'), routing_key='celery'),)
 
 CELERYD_MAX_TASKS_PER_CHILD=40
 

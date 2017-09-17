@@ -153,3 +153,5 @@ REDIS_PWD                           ="redisPwd"
 
 CELERYD_CONCURRENCY                 ="celerydConcurrency"
 CFG_PATH                            ="cfgPath"
+PRIORITY                            ="priority"
+

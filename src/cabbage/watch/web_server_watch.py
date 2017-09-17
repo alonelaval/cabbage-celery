@@ -16,6 +16,7 @@ from cabbage.constants import JOBS, JOB_DELETE, BASE, WORKS
 from cabbage.data.store_factory import storeFactory
 from cabbage.event.server_jobs_event import AddBrokerServerEvent
 from cabbage.job.task_cache import TaskCacheHolder
+from kombu.entity import Exchange, Queue
 import zope.event
 log = Logger.getLogger(__name__)
 
@@ -60,6 +61,7 @@ def jobWebWatch(children):
     store = storeFactory.getStore()
     try:
         brokers={}
+        broker_queues={}
         for jobId in children:
             try:
                 job=store.getJob(jobId)#toreHolder.getStore().getJob(jobId)
@@ -72,15 +74,24 @@ def jobWebWatch(children):
                     brokerServer=job.brokerServer
                    
                     routes={}
+                    queues={}
                     for taskName in job.tasks:
                         que=store.getQueue(job.brokerQueue)
-                        routes[taskName]={'queue': que.queueName, 'routing_key': que.routingKey}
+                        routes[taskName]={'queue': que.queueName, 'routing_key': que.routingKey,'exchange':que.queueName}
                         TaskCacheHolder.getJobCache().put(taskName,job.jobId)
-                         
+                        queues[que.queueName]=Queue(que.queueName, Exchange(que.queueName), routing_key=que.queueName,queue_arguments={'x-max-priority':int(que.priority)})
+                    
+                    
+                    if brokerServer in broker_queues:
+                        broker_queues[brokerServer].update(queues)
+                    else:
+                        broker_queues[brokerServer] = queues
+                            
                     if brokerServer in brokers:
                         brokers[brokerServer].update(routes)
                     else:
                         brokers[brokerServer] = routes
+                        
             except Exception:
                 Logger.exception( log)
                 
@@ -89,11 +100,13 @@ def jobWebWatch(children):
             brokerServer = store.getBrokerServer(broker)
             #修复BUG，导致任务提交的celery队列里面去了
             cabbage = Cabbage(hostName=brokerServer.hostName,broker=brokerServer.connectUri)
+            cabbage.app.conf.update(CELERY_QUEUES = tuple( broker_queues.get(broker).values()))
             cabbage.app.conf.update(CELERY_ROUTES = routes)
             CabbageHolder.getServerCabbages()[brokerServer.hostName] = cabbage
-            
 #             CabbageHolder.getServerCabbages()[brokerServer.hostName].getApp().conf.update(CELERY_ROUTES = routes)
             Logger.info(log,"更新队列服务器【%s】ROUTES【%s】"% (brokerServer.hostName,str(routes)))
+            
+            
         
     except Exception:
         Logger.exception( log)

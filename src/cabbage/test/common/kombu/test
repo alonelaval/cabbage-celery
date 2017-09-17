@@ -1,0 +1,24 @@
+{
+    'utc': True,
+    'chord': None,
+    'args': ('{
+        "detail_url": "http://zj.gsxt.gov.cn/entinfo/anomalyinfo?encryPriPID=4CAA71B9A21E061F517C569C8631053DB51C4B8DFB0EADE299B9AE470E367B72&classFlag=1",
+        "company_name": "\xe6\x9d\xad\xe5\xb7\x9e\xe6\xb0\xb8\xe4\xb8\xb0\xe7\xbe\xbd\xe7\xbb\x92\xe5\x88\xb6\xe5\x93\x81\xe6\x9c\x89\xe9\x99\x90\xe5\x85\xac\xe5\x8f\xb8"
+    }',
+    ),
+    'retries': 0,
+    'expires': None,
+    'task': 'zhejiang_operation_task.ZheJiangTask',
+    'callbacks': None,
+    'errbacks': None,
+    'timelimit': (None,
+    None),
+    'taskset': None,
+    'kwargs': {
+        'jobId': u'job-f9bd861f-1ea6-4d87-b8cc-2a4ec387e2ee'
+    },
+    'eta': None,
+    'id': u'2d22b621-c0fa-467b-9591-5b76455aeda8@job-f9bd861f-1ea6-4d87-b8cc-2a4ec387e2ee@zhejiang_operation_task.ZheJiangTask'
+}
+
+[[1, 2, None], {u'jobId': u'job-a9113f94-8325-4280-b171-4c2b3b55c9cd'}, {u'errbacks': None, u'callbacks': None, u'chord': None, u'chain': None}]

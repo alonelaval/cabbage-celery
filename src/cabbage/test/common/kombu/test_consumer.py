@@ -25,12 +25,13 @@ class TestKombu(unittest.TestCase):
 #         client = KombuClient()
 #         client.clearQueue("huawei")
   
-
+    #amqp://cabbage_celery_url:cabbage_celery_url@123.59.211.146:5672/cabbage_vhost_url
+    #amqp://cabbage_celery:cabbage_celery@172.16.4.134:5672/cabbage_vhost
     def testUrl(self):
         client = KombuClient(url="amqp://cabbage_celery:cabbage_celery@172.16.4.134:5672/cabbage_vhost")
         conn = client.conn
         conn.connect()
-        video_queue = Queue('hdfs', exchange=Exchange("hdfs"), routing_key='hdfs')
+        video_queue = Queue('celery', exchange=Exchange("celery"), routing_key='celery')
         with conn.Consumer(video_queue, callbacks=[process_media],accept=['json', 'pickle', 'msgpack', 'yaml']) as consumer:
         # Process messages and handle events on all channels
             while True:

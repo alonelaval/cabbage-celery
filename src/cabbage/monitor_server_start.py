@@ -18,7 +18,7 @@ from cabbage.event.server_jobs_event import \
 from cabbage.net.server_gevent import GeventStreamServer
 from cabbage.queue.job_queue import JobEventPoolHolder
 from cabbage.utils.util import singleton
-from cabbage.watch.server_jobs_watch import jobReadyWatch, \
+from cabbage.watch.monitor_server_watch import jobReadyWatch, \
     configWatch, workWatch, brokerServerWatch
 from cabbage.web.cabbage_application import \
     CabbageApplicationContorl
